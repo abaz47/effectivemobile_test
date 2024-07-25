@@ -71,12 +71,19 @@ class Library():
         Аргументом функция принимает файловый поток."""
         try:
             data = load(fp)["books"]
-            ids_set = {}
+            ids_set = set()
             for book in data:
+                # проверка на повторяющийся id у книг в файле
                 if book["id"] in ids_set:
                     raise ValueError(
-                        self.BAD_FILE_MESSAGE, self.REPEATED_ID, id
+                        "".join(
+                            [
+                                self.BAD_FILE_MESSAGE,
+                                self.REPEATED_ID, book["id"]
+                            ]
+                        )
                     )
+                ids_set.add(book["id"])
                 self.add_book(
                     Book(
                         book["title"],
